@@ -6,12 +6,11 @@
 /*   By: mmartin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 18:28:01 by mmartin-          #+#    #+#             */
-/*   Updated: 2020/01/22 15:13:13 by mmartin-         ###   ########.fr       */
+/*   Updated: 2020/01/22 20:00:07 by mmartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <fcntl.h>
 
 static char	*read_next_buff(int fd)
 {
@@ -30,23 +29,26 @@ static char	*read_next_buff(int fd)
 	return (strread);
 }
 
-static int	check_line(int fd, char **line, char **upper)
+static int	update_status(int fd, char *current, char **tab, char **line)
 {
-	char	*tmp;
+	char *aux;
 
-	if (!*line[fd])
-		return (0);
-	tmp = ft_strjoin(line[fd], read_next_buff(fd));
-	free(line[fd]);
-	line[fd] = tmp;
-	if (ft_strchr(line[fd], '\n') != -1)
+	if (ft_strchr(tab[fd], '\n') != -1)
 	{
-		*upper = ft_substr(line[fd], 0, ft_strchr(line[fd], '\n'));
-		tmp = ft_substr(line[fd],
-				ft_strchr(line[fd], '\n') + 1, ft_strlen(line[fd]));
-		free(line[fd]);
-		line[fd] = tmp;
+		*line = ft_substr(tab[fd], 0, ft_strchr(tab[fd], '\n'));
+		aux = ft_substr(tab[fd],
+				ft_strchr(tab[fd], '\n') + 1, ft_strlen(tab[fd]));
+		free(tab[fd]);
+		free(current);
+		tab[fd] = aux;
 		return (1);
+	}
+	if (ft_strlen(current) == 0)
+	{
+		*line = ft_strdup(tab[fd]);
+		free(tab[fd]);
+		free(current);
+		return (0);
 	}
 	return (-1);
 }
@@ -54,28 +56,18 @@ static int	check_line(int fd, char **line, char **upper)
 int			get_next_line(int fd, char **line)
 {
 	static char	*tab[4096];
-	int			status;
+	char		*aux;
+	char		*current;
 
 	if (fd < 0 || (!tab[fd] && !(tab[fd] = read_next_buff(fd))))
 		return (-1);
-	if ((status = check_line(fd, tab, line)) != -1)
-		return (status);
-	while ((status = check_line(fd, tab, line)) == -1)
-		;
-	return (status);
-}
-
-int		main(int argc, char *argv[])
-{
-	int fd;
-	char *line;
-	int status;
-
-	fd = open(argv[1], O_RDONLY);
-	while ((status = get_next_line(fd, &line)) == 1)
+	while (ft_strlen(current = read_next_buff(fd)) != 0 &&
+			ft_strchr(tab[fd], '\n') == -1)
 	{
-		printf("L: %s\n", line);
-		free(line);
+		aux = ft_strjoin(tab[fd], current);
+		free(current);
+		free(tab[fd]);
+		tab[fd] = aux;
 	}
-	close(fd);
+	return (update_status(fd, current, tab, line));
 }

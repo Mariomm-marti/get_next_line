@@ -6,7 +6,7 @@
 /*   By: mmartin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 11:34:20 by mmartin-          #+#    #+#             */
-/*   Updated: 2020/01/22 15:14:52 by mmartin-         ###   ########.fr       */
+/*   Updated: 2020/01/22 19:33:59 by mmartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int		ft_strlen(const char *s)
 	int		count;
 
 	count = 0;
+	if (!s)
+		return (count);
 	while (*(s + count))
 		count++;
 	return (count);
@@ -28,7 +30,7 @@ int		ft_strchr(const char *s, char c)
 	int		count;
 
 	count = -1;
-	while (*(s + count++))
+	while (*(s + ++count))
 		if (*(s + count) == c)
 			return (count);
 	return (-1);
@@ -50,10 +52,10 @@ char	*ft_strdup(const char *s)
 	return (alloc);
 }
 
-char	*ft_substr(const char *s, size_t start, size_t len)
+char	*ft_substr(const char *s, int start, int len)
 {
 	char	*allocated;
-	size_t	count;
+	int		count;
 
 	if (!s)
 		return (NULL);
