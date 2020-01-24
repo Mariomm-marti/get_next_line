@@ -6,68 +6,62 @@
 /*   By: mmartin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 18:28:01 by mmartin-          #+#    #+#             */
-/*   Updated: 2020/01/22 20:00:07 by mmartin-         ###   ########.fr       */
+/*   Updated: 2020/01/24 18:47:39 by mmartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*read_next_buff(int fd)
+static int	read_next_buff(int fd, char **tab)
 {
-	char	*strread;
+	char	buffer[BUFFER_SIZE + 1];
+	char	*aux;
 	int		read_bytes;
 
-	if (!(strread = (char *)malloc(BUFFER_SIZE + 1)))
-		return (NULL);
-	read_bytes = read(fd, strread, BUFFER_SIZE);
+	read_bytes = read(fd, buffer, BUFFER_SIZE);
 	if (read_bytes < 0)
-	{
-		free(strread);
-		return (NULL);
-	}
-	strread[read_bytes] = 0;
-	return (strread);
-}
-
-static int	update_status(int fd, char *current, char **tab, char **line)
-{
-	char *aux;
-
-	if (ft_strchr(tab[fd], '\n') != -1)
-	{
-		*line = ft_substr(tab[fd], 0, ft_strchr(tab[fd], '\n'));
-		aux = ft_substr(tab[fd],
-				ft_strchr(tab[fd], '\n') + 1, ft_strlen(tab[fd]));
-		free(tab[fd]);
-		free(current);
-		tab[fd] = aux;
-		return (1);
-	}
-	if (ft_strlen(current) == 0)
-	{
-		*line = ft_strdup(tab[fd]);
-		free(tab[fd]);
-		free(current);
+		return (-1);
+	if (read_bytes == 0)
 		return (0);
-	}
-	return (-1);
+	buffer[read_bytes] = 0;
+	aux = ft_strjoin(tab[fd], buffer);
+	if (tab[fd])
+		free(tab[fd]);
+	tab[fd] = aux;
+	return (1);
 }
 
 int			get_next_line(int fd, char **line)
 {
-	static char	*tab[4096];
-	char		*aux;
-	char		*current;
+	static char		*tab[4096];
+	char			*aux;
+	int				r_bytes;
 
-	if (fd < 0 || (!tab[fd] && !(tab[fd] = read_next_buff(fd))))
+	if (fd < 0 || !line || BUFFER_SIZE < 0)
 		return (-1);
-	while (ft_strlen(current = read_next_buff(fd)) != 0 &&
-			ft_strchr(tab[fd], '\n') == -1)
+	r_bytes = 1;
+	if (!tab[fd] && (r_bytes = read_next_buff(fd, tab)) != 1)
+		return (r_bytes);
+	if (!*tab[fd])
 	{
-		aux = ft_strjoin(tab[fd], current);
-		free(current);
+		free(tab[fd]);
+		return (0);
+	}
+	while (ft_strchr(tab[fd], '\n') == -1 && r_bytes > 0)
+	{
+		r_bytes = read_next_buff(fd, tab);
+	}
+	if (ft_strchr(tab[fd], '\n') != -1)
+	{
+		read_next_buff(fd, tab);
+		*line = ft_substr(tab[fd], 0, ft_strchr(tab[fd], '\n'));
+		aux = ft_substr(tab[fd],
+				ft_strchr(tab[fd], '\n') + 1, ft_strlen(tab[fd]));
 		free(tab[fd]);
 		tab[fd] = aux;
+		return (1);
 	}
-	return (update_status(fd, current, tab, line));
+	*line = tab[fd];
+	tab[fd] = ft_strdup("");
+	return (1);
 }

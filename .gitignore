@@ -1,4 +1,5 @@
-*.txt
 *.out
+main.c
 *dSYM/
 .*.swp
+test_files/
