@@ -6,11 +6,20 @@
 /*   By: mmartin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 18:28:01 by mmartin-          #+#    #+#             */
-/*   Updated: 2020/01/25 15:23:24 by mmartin-         ###   ########.fr       */
+/*   Updated: 2020/01/25 15:57:25 by mmartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+/*
+**	DESCRIPTION
+**		Initialize buffer to 0, reads file for _BUFFER_SIZE_ and joins previous
+**		and current read
+**	RETURN VALUES
+**		Returns -1 if failed to read, 0 if no bytes could be read, and
+**		otherwise the number of bytes read
+*/
 
 static int	read_next_buff(int fd, char **tab)
 {
@@ -18,9 +27,6 @@ static int	read_next_buff(int fd, char **tab)
 	char	buffer[BUFFER_SIZE + 1];
 	int		read_bytes;
 
-	read_bytes = 0;
-	while (read_bytes < BUFFER_SIZE)
-		buffer[read_bytes++] = 0;
 	read_bytes = read(fd, buffer, BUFFER_SIZE);
 	if (read_bytes < 0)
 		return (-1);
@@ -33,6 +39,19 @@ static int	read_next_buff(int fd, char **tab)
 	tab[fd] = tmp;
 	return (read_bytes);
 }
+
+/*
+**	DESCRIPTION
+**		Updates line contents with the different options of read, they can be:
+**		- File is invalid (read bytes are less than 0), returns -1
+**		- File exists, but it's empty (read bytes are 0), returns 0
+**		- A NL was found, so line takes the value prior to NL and returns 1
+**		- No NL was found and its EOF, if that happens line is set to the whole
+**			previous read buffer and the whole memory is free
+**	RETURN VALUES
+**		The return value is passed to get_next_line, so it has the same return
+**		options
+*/
 
 static int	update_line(int fd, int read, char **tab, char **line)
 {
@@ -48,7 +67,8 @@ static int	update_line(int fd, int read, char **tab, char **line)
 	if (ft_strchr(tab[fd], '\n') != -1)
 	{
 		*line = ft_substr(tab[fd], 0, ft_strchr(tab[fd], '\n'));
-		x = ft_substr(tab[fd], ft_strchr(tab[fd], '\n') + 1, ft_strlen(tab[fd]));
+		x = ft_substr(tab[fd],
+				ft_strchr(tab[fd], '\n') + 1, ft_strlen(tab[fd]));
 		free(tab[fd]);
 		tab[fd] = x;
 		return (1);
@@ -58,6 +78,17 @@ static int	update_line(int fd, int read, char **tab, char **line)
 	tab[fd] = NULL;
 	return (0);
 }
+
+/*
+**	DESCRIPTION
+**		General part of the get_next_line, sanitize input, checks for
+**		existing NL in previous reads, and finally read until NL is
+**		found or file reach EOF
+**	RETURN VALUES
+**		- If any problem, -1
+**		- If a NL was found, 1
+**		- When EOF, 0
+*/
 
 int			get_next_line(int fd, char **line)
 {

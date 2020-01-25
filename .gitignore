@@ -2,4 +2,5 @@
 main.c
 *dSYM/
 .*.swp
+*.gch
 test_files/
