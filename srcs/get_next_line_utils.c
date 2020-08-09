@@ -6,11 +6,11 @@
 /*   By: mmartin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 11:34:20 by mmartin-          #+#    #+#             */
-/*   Updated: 2020/01/25 12:50:07 by mmartin-         ###   ########.fr       */
+/*   Updated: 2020/08/09 13:00:22 by mmartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "../includes/get_next_line.h"
 #include <stdlib.h>
 
 int		ft_strlen(const char *s)
