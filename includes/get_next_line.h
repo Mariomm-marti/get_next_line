@@ -6,7 +6,7 @@
 /*   By: mmartin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 18:41:15 by mmartin-          #+#    #+#             */
-/*   Updated: 2020/08/09 22:27:04 by mmartin-         ###   ########.fr       */
+/*   Updated: 2020/08/09 22:43:09 by mmartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 512
+# endif
 
 char	*gnl_strdup(const char *s);
 char	*gnl_substr(const char *s, int start, int len);
