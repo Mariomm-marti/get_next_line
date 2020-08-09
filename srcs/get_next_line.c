@@ -6,7 +6,7 @@
 /*   By: mmartin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 18:28:01 by mmartin-          #+#    #+#             */
-/*   Updated: 2020/08/09 13:00:13 by mmartin-         ###   ########.fr       */
+/*   Updated: 2020/08/09 22:26:32 by mmartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	read_next_buff(int fd, char **tab)
 	if (read_bytes == 0)
 		return (0);
 	buffer[read_bytes] = 0;
-	tmp = ft_strjoin(tab[fd], buffer);
+	tmp = gnl_strjoin(tab[fd], buffer);
 	if (tab[fd])
 		free(tab[fd]);
 	tab[fd] = tmp;
@@ -61,19 +61,19 @@ static int	update_line(int fd, int read, char **tab, char **line)
 		return (-1);
 	if (!tab[fd] && read == 0)
 	{
-		*line = ft_strdup("");
+		*line = gnl_strdup("");
 		return (0);
 	}
-	if (ft_strchr(tab[fd], '\n') != -1)
+	if (gnl_strchr(tab[fd], '\n') != -1)
 	{
-		*line = ft_substr(tab[fd], 0, ft_strchr(tab[fd], '\n'));
-		x = ft_substr(tab[fd],
-				ft_strchr(tab[fd], '\n') + 1, ft_strlen(tab[fd]));
+		*line = gnl_substr(tab[fd], 0, gnl_strchr(tab[fd], '\n'));
+		x = gnl_substr(tab[fd],
+				gnl_strchr(tab[fd], '\n') + 1, gnl_strlen(tab[fd]));
 		free(tab[fd]);
 		tab[fd] = x;
 		return (1);
 	}
-	*line = ft_strdup(tab[fd]);
+	*line = gnl_strdup(tab[fd]);
 	free(tab[fd]);
 	tab[fd] = NULL;
 	return (0);
@@ -97,10 +97,10 @@ int			get_next_line(int fd, char **line)
 
 	if (fd < 0 || line == NULL || BUFFER_SIZE <= 0)
 		return (-1);
-	if (tab[fd] && ft_strchr(tab[fd], '\n') != -1)
+	if (tab[fd] && gnl_strchr(tab[fd], '\n') != -1)
 		return (update_line(fd, 0, tab, line));
 	while ((read_bytes = read_next_buff(fd, tab)) > 0 &&
-			ft_strchr(tab[fd], '\n') == -1)
+			gnl_strchr(tab[fd], '\n') == -1)
 		;
 	return (update_line(fd, read_bytes, tab, line));
 }

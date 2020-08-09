@@ -6,14 +6,14 @@
 /*   By: mmartin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 11:34:20 by mmartin-          #+#    #+#             */
-/*   Updated: 2020/08/09 13:00:22 by mmartin-         ###   ########.fr       */
+/*   Updated: 2020/08/09 22:29:30 by mmartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/get_next_line.h"
 #include <stdlib.h>
 
-int		ft_strlen(const char *s)
+int		gnl_strlen(const char *s)
 {
 	int		count;
 
@@ -25,7 +25,7 @@ int		ft_strlen(const char *s)
 	return (count);
 }
 
-int		ft_strchr(const char *s, char c)
+int		gnl_strchr(const char *s, char c)
 {
 	int		count;
 
@@ -36,7 +36,7 @@ int		ft_strchr(const char *s, char c)
 	return (-1);
 }
 
-char	*ft_strdup(const char *s)
+char	*gnl_strdup(const char *s)
 {
 	char	*alloc;
 	size_t	count;
@@ -52,16 +52,16 @@ char	*ft_strdup(const char *s)
 	return (alloc);
 }
 
-char	*ft_substr(const char *s, int start, int len)
+char	*gnl_substr(const char *s, int start, int len)
 {
 	char	*allocated;
 	int		count;
 
 	if (!s)
 		return (NULL);
-	if (ft_strlen(s) < start)
-		return (ft_strdup(""));
-	len = ((ft_strlen(s + start) < len) ? ft_strlen(s + start) : len);
+	if (gnl_strlen(s) < start)
+		return (gnl_strdup(""));
+	len = ((gnl_strlen(s + start) < len) ? gnl_strlen(s + start) : len);
 	if ((allocated = (char *)malloc(len + 1)) == NULL)
 		return (NULL);
 	count = 0;
@@ -74,7 +74,7 @@ char	*ft_substr(const char *s, int start, int len)
 	return (allocated);
 }
 
-char	*ft_strjoin(const char *s1, const char *s2)
+char	*gnl_strjoin(const char *s1, const char *s2)
 {
 	size_t	count;
 	size_t	count_s2;
@@ -83,8 +83,8 @@ char	*ft_strjoin(const char *s1, const char *s2)
 	if (!s2)
 		return (NULL);
 	if (!s1)
-		return (ft_strdup(s2));
-	if ((alloc = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1)) == NULL)
+		return (gnl_strdup(s2));
+	if ((alloc = (char *)malloc(gnl_strlen(s1) + gnl_strlen(s2) + 1)) == NULL)
 		return (NULL);
 	count = 0;
 	while (*(s1 + count))
