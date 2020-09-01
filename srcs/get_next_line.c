@@ -6,11 +6,13 @@
 /*   By: mmartin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 18:28:01 by mmartin-          #+#    #+#             */
-/*   Updated: 2020/08/09 22:26:32 by mmartin-         ###   ########.fr       */
+/*   Updated: 2020/09/01 18:17:07 by mmartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/get_next_line.h"
+#include <stdlib.h>
+#include <unistd.h>
 
 /*
 **	DESCRIPTION

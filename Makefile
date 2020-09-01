@@ -3,44 +3,42 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mmartin- <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: mmartin- <mmartin-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/08/09 11:49:36 by mmartin-          #+#    #+#              #
-#    Updated: 2020/08/09 12:59:52 by mmartin-         ###   ########.fr        #
+#    Created: 2020/01/10 15:21:05 by mmartin-          #+#    #+#              #
+#    Updated: 2020/09/01 18:18:39 by mmartin-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-ECHO_MSG	= @echo "\x1b[1;100;mget_next_line\x1b[0;90m $(2)$(1)...\x1b[0m"
+GNL_MSG		= @echo "\x1b[48;5;126m\x1b[38;5;15m\x1b[1m       gnl\x1b[0m\x1b[0;90m $(1)             \x1b[0m"
 
-GNL_D		= srcs
-GNL_I		= includes
+GNL_SRCS	= $(wildcard srcs/*)
+GNL_OBJS	= $(GNL_SRCS:.c=.o)
 
-SRCS		= $(shell find $(GNL_D) -type f -name "*.c")
-OBJS		= $(SRCS:.c=.o)
-
-PATH		= $(shell pwd)
-NAME		= libgnl.a
+GNL_OUT		= "."
+GNL_NAME	= libgnl.a
 
 %.o : %.c
-			@clang -Wall -Werror -Wextra -D BUFFER_SIZE=512 -c $< -o $@ -O3 -march=skylake
+					@printf "\x1b[48;5;126m\x1b[38;5;15m\x1b[1m       gnl\x1b[0m\x1b[0;90m Compiling $@...                           \x1b[0m\r"
+					@clang -Wall -Werror -Wextra -c $< -o $@ -O3 -march=skylake
 
-$(NAME):	$(OBJS)
-			$(call ECHO_MSG,"compiling")
-			@ar -rcs $(PATH)/$(NAME) $(OBJS)
+$(GNL_NAME):	$(GNL_OBJS)
+					$(call GNL_MSG,"Linking objects into $(GNL_OUT)/$(GNL_NAME)")
+					@ar -rcs $(GNL_OUT)/$(GNL_NAME) $(GNL_OBJS)
+					$(call GNL_MSG,"Finished linking","\n")
 
-all:		$(NAME)
+all:			$(GNL_NAME)
 
-# Deprecated, maintained for project integrity
-bonus:		$(NAME)
+bonus:			$(GNL_NAME)
 
 clean:
-			$(call ECHO_MSG,"deleting objects")
-			@rm -f $(OBJS)
+					$(call GNL_MSG,"Deleting all objects...","\n")
+					@rm -f $(GNL_OBJS)
 
-fclean:		clean
-			$(call ECHO_MSG,"deleting library")
-			@rm -f $(PATH)/$(NAME)
+fclean:			clean
+					$(call GNL_MSG,"Deleting $(GNL_OUT)/$(GNL_NAME)...","\n")
+					@rm -f $(GNL_OUT)/$(GNL_NAME)
 
-re:			fclean $(NAME)
+re:				fclean $(GNL_NAME)
 
-.PHONY:		all bonus clean fclean re
+.PHONY:			all bonus clean fclean re
