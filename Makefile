@@ -6,13 +6,14 @@
 #    By: mmartin- <mmartin-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/10 15:21:05 by mmartin-          #+#    #+#              #
-#    Updated: 2020/09/01 18:18:39 by mmartin-         ###   ########.fr        #
+#    Updated: 2020/11/10 20:50:12 by mmartin-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 GNL_MSG		= @echo "\x1b[48;5;126m\x1b[38;5;15m\x1b[1m       gnl\x1b[0m\x1b[0;90m $(1)             \x1b[0m"
 
-GNL_SRCS	= $(wildcard srcs/*)
+GNL_SRCS	= srcs/get_next_line.c \
+			  srcs/get_next_line_utils.c
 GNL_OBJS	= $(GNL_SRCS:.c=.o)
 
 GNL_OUT		= "."
