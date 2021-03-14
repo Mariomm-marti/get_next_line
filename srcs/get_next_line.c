@@ -6,7 +6,7 @@
 /*   By: mmartin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 18:28:01 by mmartin-          #+#    #+#             */
-/*   Updated: 2020/09/01 18:17:07 by mmartin-         ###   ########.fr       */
+/*   Updated: 2021/03/14 17:31:35 by mmartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int	read_next_buff(int fd, char **tab)
 
 static int	update_line(int fd, int read, char **tab, char **line)
 {
-	char *x;
+	char	*x;
 
 	if (read < 0)
 		return (-1);
@@ -92,7 +92,7 @@ static int	update_line(int fd, int read, char **tab, char **line)
 **		- When EOF, 0
 */
 
-int			get_next_line(int fd, char **line)
+int	get_next_line(int fd, char **line)
 {
 	static char		*tab[4096];
 	int				read_bytes;
@@ -101,8 +101,8 @@ int			get_next_line(int fd, char **line)
 		return (-1);
 	if (tab[fd] && gnl_strchr(tab[fd], '\n') != -1)
 		return (update_line(fd, 0, tab, line));
-	while ((read_bytes = read_next_buff(fd, tab)) > 0 &&
-			gnl_strchr(tab[fd], '\n') == -1)
-		;
+	read_bytes = read_next_buff(fd, tab);
+	while (read_bytes > 0 && gnl_strchr(tab[fd], '\n') == -1)
+		read_bytes = read_next_buff(fd, tab);
 	return (update_line(fd, read_bytes, tab, line));
 }

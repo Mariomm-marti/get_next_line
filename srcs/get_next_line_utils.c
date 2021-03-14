@@ -6,14 +6,14 @@
 /*   By: mmartin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 11:34:20 by mmartin-          #+#    #+#             */
-/*   Updated: 2020/08/09 22:29:30 by mmartin-         ###   ########.fr       */
+/*   Updated: 2021/03/14 16:52:14 by mmartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/get_next_line.h"
 #include <stdlib.h>
 
-int		gnl_strlen(const char *s)
+int	gnl_strlen(const char *s)
 {
 	int		count;
 
@@ -25,7 +25,7 @@ int		gnl_strlen(const char *s)
 	return (count);
 }
 
-int		gnl_strchr(const char *s, char c)
+int	gnl_strchr(const char *s, char c)
 {
 	int		count;
 
@@ -44,7 +44,8 @@ char	*gnl_strdup(const char *s)
 	count = 0;
 	while (*(s + count))
 		count++;
-	if (!(alloc = (char *)malloc(count + 1)))
+	alloc = malloc(count + 1);
+	if (!alloc)
 		return (NULL);
 	*(alloc + count) = 0;
 	while (count-- > 0)
@@ -61,8 +62,10 @@ char	*gnl_substr(const char *s, int start, int len)
 		return (NULL);
 	if (gnl_strlen(s) < start)
 		return (gnl_strdup(""));
-	len = ((gnl_strlen(s + start) < len) ? gnl_strlen(s + start) : len);
-	if ((allocated = (char *)malloc(len + 1)) == NULL)
+	if (gnl_strlen(s + start) < len)
+		len = gnl_strlen(s + start);
+	allocated = malloc(len + 1);
+	if (!allocated)
 		return (NULL);
 	count = 0;
 	while (count < len)
@@ -76,28 +79,25 @@ char	*gnl_substr(const char *s, int start, int len)
 
 char	*gnl_strjoin(const char *s1, const char *s2)
 {
-	size_t	count;
-	size_t	count_s2;
+	ssize_t	count;
+	ssize_t	count_s2;
 	char	*alloc;
 
 	if (!s2)
 		return (NULL);
 	if (!s1)
 		return (gnl_strdup(s2));
-	if ((alloc = (char *)malloc(gnl_strlen(s1) + gnl_strlen(s2) + 1)) == NULL)
+	alloc = malloc(gnl_strlen(s1) + gnl_strlen(s2) + 1);
+	if (!alloc)
 		return (NULL);
-	count = 0;
-	while (*(s1 + count))
-	{
+	count = -1;
+	while (*(s1 + ++count))
 		*(alloc + count) = *(s1 + count);
-		count++;
-	}
-	count_s2 = 0;
-	while (*(s2 + count_s2))
+	count_s2 = -1;
+	while (*(s2 + ++count_s2))
 	{
 		*(alloc + count) = *(s2 + count_s2);
 		count++;
-		count_s2++;
 	}
 	*(alloc + count) = 0;
 	return (alloc);
