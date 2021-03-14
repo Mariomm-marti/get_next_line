@@ -6,11 +6,12 @@
 /*   By: mmartin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 11:34:20 by mmartin-          #+#    #+#             */
-/*   Updated: 2021/03/14 16:52:14 by mmartin-         ###   ########.fr       */
+/*   Updated: 2021/03/14 18:50:52 by mmartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/get_next_line.h"
+#include <stddef.h>
 #include <stdlib.h>
 
 int	gnl_strlen(const char *s)
@@ -79,8 +80,8 @@ char	*gnl_substr(const char *s, int start, int len)
 
 char	*gnl_strjoin(const char *s1, const char *s2)
 {
-	ssize_t	count;
-	ssize_t	count_s2;
+	int		count;
+	int		count_s2;
 	char	*alloc;
 
 	if (!s2)
