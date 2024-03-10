@@ -1,4 +1,4 @@
-# get_next_line - 42 second programming project
+# get_next_line
 This project helped developing knowledges on code organisation and deeper C and system understanding on how file read works (*file descriptors, one-way reading, static variables, etc)*.
 Important notes to keep in mind while reading this project code:
 
